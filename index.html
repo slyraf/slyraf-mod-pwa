@@ -5,39 +5,91 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
   <meta name="description" content="Dashboard pour les modérateurs de Slyraf avec accès rapide aux outils et commandes">
   <meta name="theme-color" content="#001a33">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Slyraf MOD">
+  
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png">
+  
   <title>Slyraf MOD Dashboard</title>
   
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-    
-    body {
-      background: linear-gradient(180deg, #001a33 0%, #0a0a0a 100%);
-      color: white;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
+
+    :root {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #121212;
+      --bg-tertiary: #1a1a1a;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(255, 255, 255, 0.15);
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0a0;
+      --text-tertiary: #707070;
+      --accent-red: #ff0000;
+      --accent-gold: #ffd700;
+      --accent-blue: #60a5fa;
+      --accent-purple: #9146ff;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      --shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.4);
     }
 
+    body {
+      background: var(--bg-primary);
+      font-family: 'Inter', sans-serif;
+      color: var(--text-primary);
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    body::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    body::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    body::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* HEADER */
     .header {
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(20px);
-      padding: 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background: linear-gradient(180deg, #001a33 0%, var(--bg-primary) 100%);
+      padding: 24px;
+      border-bottom: 1px solid var(--border-color);
       position: sticky;
       top: 0;
       z-index: 100;
+      backdrop-filter: blur(20px);
     }
 
-    .header-content {
-      max-width: 1200px;
-      margin: 0 auto;
+    .header-top {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
     .logo {
@@ -47,536 +99,1631 @@
       background: linear-gradient(135deg, #3b82f6, #60a5fa);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
     }
 
-    .status {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 14px;
-      padding: 8px 16px;
-      background: rgba(34, 197, 94, 0.1);
-      border: 1px solid rgba(34, 197, 94, 0.3);
-      border-radius: 20px;
+    .badge {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--accent-blue);
+      background: rgba(59, 130, 246, 0.15);
+      padding: 4px 12px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border: 1px solid rgba(59, 130, 246, 0.3);
     }
 
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      background: #22c55e;
-      border-radius: 50%;
-      animation: pulse-dot 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse-dot {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.6; transform: scale(1.2); }
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    .nav-tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 24px;
-      overflow-x: auto;
-      padding-bottom: 8px;
-    }
-
-    .nav-tabs::-webkit-scrollbar {
-      height: 4px;
-    }
-
-    .nav-tabs::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 2px;
-    }
-
-    .tab-btn {
-      padding: 12px 24px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      white-space: nowrap;
-    }
-
-    .tab-btn.active {
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
-      border-color: transparent;
-      color: white;
-      box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
-    }
-
-    .tab-btn:hover:not(.active) {
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .tab-content {
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .card {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 16px;
-    }
-
-    .card-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .grid {
+    .header-stats {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 16px;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
     }
 
-    .command-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+    .giveaway-countdown {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 165, 0, 0.1));
+      border: 1px solid rgba(255, 215, 0, 0.3);
       border-radius: 12px;
-      padding: 16px;
-      transition: all 0.2s ease;
-      cursor: pointer;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
     }
 
-    .command-card:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(59, 130, 246, 0.5);
-      transform: translateY(-2px);
+    .countdown-icon {
+      font-size: 28px;
+      filter: drop-shadow(0 2px 8px rgba(255, 215, 0, 0.5));
     }
 
-    .command-card:active {
-      transform: translateY(0);
+    .countdown-text {
+      text-align: center;
+      width: 100%;
     }
 
-    .command-name {
-      font-size: 16px;
-      font-weight: 700;
-      color: #60a5fa;
-      margin-bottom: 8px;
-      font-family: 'Courier New', monospace;
-    }
-
-    .command-desc {
-      font-size: 13px;
-      color: rgba(255, 255, 255, 0.7);
-      line-height: 1.5;
-    }
-
-    .event-item {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 12px;
-    }
-
-    .event-date {
-      font-size: 12px;
-      color: #60a5fa;
+    .countdown-label {
+      font-size: 10px;
       font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .event-title {
-      font-size: 16px;
-      font-weight: 600;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       margin-bottom: 4px;
     }
 
-    .event-time {
-      font-size: 13px;
-      color: rgba(255, 255, 255, 0.6);
+    .countdown-value {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--accent-gold);
+      letter-spacing: -0.5px;
     }
 
-    .quick-action {
+    .stat-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 16px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      text-decoration: none;
-      color: white;
-      transition: all 0.2s ease;
+      gap: 14px;
+      transition: all 0.3s ease;
+      cursor: pointer;
     }
 
-    .quick-action:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(59, 130, 246, 0.5);
-      transform: translateX(4px);
+    .stat-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-2px);
     }
 
-    .quick-action-icon {
-      font-size: 24px;
-      flex-shrink: 0;
+    .stat-icon {
+      font-size: 28px;
+      filter: drop-shadow(0 2px 8px currentColor);
     }
 
-    .quick-action-text {
+    .stat-card.twitch .stat-icon {
+      color: #9146ff;
+    }
+
+    .stat-content {
       flex: 1;
     }
 
-    .quick-action-title {
-      font-size: 15px;
+    .stat-label {
+      font-size: 11px;
       font-weight: 600;
-      margin-bottom: 2px;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
     }
 
-    .quick-action-desc {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.6);
+    .stat-value {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.5px;
     }
 
-    .search-box {
-      width: 100%;
-      padding: 12px 16px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      color: white;
-      font-size: 14px;
-      margin-bottom: 16px;
-      transition: all 0.2s ease;
-    }
-
-    .search-box:focus {
-      outline: none;
-      border-color: #3b82f6;
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .search-box::placeholder {
-      color: rgba(255, 255, 255, 0.4);
-    }
-
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      background: rgba(34, 197, 94, 0.95);
-      backdrop-filter: blur(20px);
-      padding: 12px 24px;
-      border-radius: 12px;
-      color: white;
-      font-size: 14px;
-      font-weight: 600;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      transition: transform 0.3s ease;
-      z-index: 1000;
-    }
-
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-    }
-
-    .loading {
-      text-align: center;
-      padding: 40px;
-      color: rgba(255, 255, 255, 0.5);
-    }
-
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid rgba(255, 255, 255, 0.1);
-      border-top-color: #60a5fa;
+    .loading-spinner-sm {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--accent-blue);
       border-radius: 50%;
-      margin: 0 auto 16px;
-      animation: spin 0.8s linear infinite;
+      animation: spin 0.6s linear infinite;
     }
 
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <div class="header-content">
-      <div class="logo">SLYRAF MOD</div>
-      <div class="status">
-        <div class="status-dot"></div>
-        <span>En ligne</span>
-      </div>
-    </div>
-  </div>
 
-  <div class="container">
-    <div class="nav-tabs">
-      <button class="tab-btn active" onclick="switchTab('home')">🏠 Accueil</button>
-      <button class="tab-btn" onclick="switchTab('commands')">⚡ Commandes</button>
-      <button class="tab-btn" onclick="switchTab('planning')">📅 Planning</button>
-      <button class="tab-btn" onclick="switchTab('tools')">🛠️ Outils</button>
-    </div>
-
-    <!-- Accueil -->
-    <div id="home" class="tab-content active">
-      <div class="card">
-        <div class="card-title">🚀 Actions rapides</div>
-        <div class="grid">
-          <a href="https://www.twitch.tv/slyraf" target="_blank" class="quick-action">
-            <div class="quick-action-icon">📺</div>
-            <div class="quick-action-text">
-              <div class="quick-action-title">Chaîne Twitch</div>
-              <div class="quick-action-desc">Ouvrir le stream</div>
-            </div>
-          </a>
-          <a href="https://dashboard.twitch.tv/u/slyraf/stream-manager" target="_blank" class="quick-action">
-            <div class="quick-action-icon">⚙️</div>
-            <div class="quick-action-text">
-              <div class="quick-action-title">Dashboard Twitch</div>
-              <div class="quick-action-desc">Gérer le stream</div>
-            </div>
-          </a>
-          <a href="https://calendar.google.com/calendar/u/0/r?cid=18ca2c7c54ab73c4274cf709da7891af0603beef111b9b21f542e84414bb1c13@group.calendar.google.com" target="_blank" class="quick-action">
-            <div class="quick-action-icon">📆</div>
-            <div class="quick-action-text">
-              <div class="quick-action-title">Calendrier</div>
-              <div class="quick-action-desc">Voir le planning complet</div>
-            </div>
-          </a>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">📊 Statistiques rapides</div>
-        <div class="grid">
-          <div class="command-card">
-            <div class="command-name">Commandes totales</div>
-            <div class="command-desc" style="font-size: 24px; font-weight: 700; color: #60a5fa; margin-top: 8px;">50+</div>
-          </div>
-          <div class="command-card">
-            <div class="command-name">Dernière MàJ</div>
-            <div class="command-desc" style="font-size: 16px; font-weight: 600; color: #22c55e; margin-top: 8px;">Aujourd'hui</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Commandes -->
-    <div id="commands" class="tab-content">
-      <div class="card">
-        <div class="card-title">⚡ Commandes Twitch</div>
-        <input type="text" class="search-box" placeholder="Rechercher une commande..." onkeyup="searchCommands(this.value)">
-        <div id="commands-grid" class="grid">
-          <!-- Les commandes seront ajoutées ici par JS -->
-        </div>
-      </div>
-    </div>
-
-    <!-- Planning -->
-    <div id="planning" class="tab-content">
-      <div class="card">
-        <div class="card-title">📅 Planning de la semaine</div>
-        <div id="planning-content">
-          <div class="loading">
-            <div class="spinner"></div>
-            <div>Chargement du planning...</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Outils -->
-    <div id="tools" class="tab-content">
-      <div class="card">
-        <div class="card-title">🛠️ Outils et liens utiles</div>
-        <div class="grid">
-          <a href="https://lagofast.com" target="_blank" class="quick-action">
-            <div class="quick-action-icon">🚀</div>
-            <div class="quick-action-text">
-              <div class="quick-action-title">LagoFast</div>
-              <div class="quick-action-desc">Optimisation réseau</div>
-            </div>
-          </a>
-          <a href="https://lootbar.gg" target="_blank" class="quick-action">
-            <div class="quick-action-icon">🎮</div>
-            <div class="quick-action-text">
-              <div class="quick-action-title">LootBar</div>
-              <div class="quick-action-desc">Services gaming</div>
-            </div>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="toast" class="toast"></div>
-
-  <script>
-    // Liste des commandes
-    const commands = [
-      { name: '!discord', desc: 'Lien vers le serveur Discord de la communauté' },
-      { name: '!planning', desc: 'Affiche le planning des streams de la semaine' },
-      { name: '!commandes', desc: 'Liste toutes les commandes disponibles' },
-      { name: '!jeu', desc: 'Affiche le jeu actuellement joué' },
-      { name: '!social', desc: 'Tous les réseaux sociaux de Slyraf' },
-      { name: '!twitter', desc: 'Lien vers le Twitter/X de Slyraf' },
-      { name: '!youtube', desc: 'Lien vers la chaîne YouTube' },
-      { name: '!instagram', desc: 'Lien vers Instagram' },
-      { name: '!tiktok', desc: 'Lien vers TikTok' },
-      { name: '!config', desc: 'Configuration PC et périphériques' },
-      { name: '!setup', desc: 'Détails du setup streaming' },
-      { name: '!cam', desc: 'Informations sur la caméra utilisée' },
-      { name: '!micro', desc: 'Informations sur le microphone' },
-      { name: '!clavier', desc: 'Modèle du clavier' },
-      { name: '!souris', desc: 'Modèle de la souris' },
-      { name: '!casque', desc: 'Modèle du casque' },
-      { name: '!sub', desc: 'Informations sur les abonnements' },
-      { name: '!prime', desc: 'Comment utiliser Twitch Prime' },
-      { name: '!vip', desc: 'Informations sur le statut VIP' },
-      { name: '!modo', desc: 'Comment devenir modérateur' },
-      { name: '!partenaire', desc: 'Informations partenariats' },
-      { name: '!sponsor', desc: 'Sponsors actuels' },
-      { name: '!lagofast', desc: 'Code promo LagoFast' },
-      { name: '!lootbar', desc: 'Code promo LootBar' },
-      { name: '!don', desc: 'Lien pour faire un don' },
-      { name: '!merch', desc: 'Boutique de merchandising' },
-      { name: '!age', desc: 'Âge de Slyraf' },
-      { name: '!pays', desc: 'Pays/Ville' },
-      { name: '!game', desc: 'Jeu principal du moment' },
-      { name: '!rank', desc: 'Rang actuel dans le jeu' },
-      { name: '!sensi', desc: 'Sensibilité et paramètres de jeu' },
-      { name: '!crosshair', desc: 'Configuration du viseur' },
-      { name: '!video', desc: 'Paramètres vidéo en jeu' },
-      { name: '!son', desc: 'Configuration audio' },
-      { name: '!uptime', desc: 'Durée du stream en cours' },
-      { name: '!followage', desc: 'Depuis quand tu follow' },
-      { name: '!viewer', desc: 'Nombre de viewers' },
-      { name: '!record', desc: 'Record de viewers' },
-      { name: '!title', desc: 'Titre du stream' },
-      { name: '!song', desc: 'Musique en cours' },
-      { name: '!playlist', desc: 'Lien vers la playlist' },
-      { name: '!clip', desc: 'Créer un clip' },
-      { name: '!topclip', desc: 'Meilleurs clips' },
-      { name: '!highlight', desc: 'Derniers highlights' },
-      { name: '!vod', desc: 'Lien vers les VODs' },
-      { name: '!schedule', desc: 'Horaires de stream' },
-      { name: '!nextstream', desc: 'Prochain stream prévu' },
-      { name: '!rules', desc: 'Règles du chat' },
-      { name: '!faq', desc: 'Questions fréquentes' },
-      { name: '!lurk', desc: 'Mode lurk activé' },
-      { name: '!back', desc: 'Retour de lurk' }
-    ];
-
-    // Afficher les commandes
-    function displayCommands(filteredCommands = commands) {
-      const grid = document.getElementById('commands-grid');
-      grid.innerHTML = filteredCommands.map(cmd => `
-        <div class="command-card" onclick="copyCommand('${cmd.name}')">
-          <div class="command-name">${cmd.name}</div>
-          <div class="command-desc">${cmd.desc}</div>
-        </div>
-      `).join('');
+    /* MENU DROPDOWN */
+    .menu-dropdown-container {
+      position: relative;
     }
 
-    // Recherche de commandes
-    function searchCommands(query) {
-      const filtered = commands.filter(cmd => 
-        cmd.name.toLowerCase().includes(query.toLowerCase()) ||
-        cmd.desc.toLowerCase().includes(query.toLowerCase())
-      );
-      displayCommands(filtered);
+    .menu-dropdown-trigger {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      color: var(--text-primary);
+      font-size: 14px;
+      font-weight: 700;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
 
-    // Copier une commande
-    function copyCommand(cmd) {
-      navigator.clipboard.writeText(cmd).then(() => {
-        showToast(`${cmd} copié !`);
-      });
+    .menu-dropdown-trigger:hover {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
     }
 
-    // Afficher un toast
-    function showToast(message) {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.classList.add('show');
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 2000);
+    .menu-dropdown-trigger.active {
+      border-color: rgba(59, 130, 246, 0.5);
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.08));
+      box-shadow: 0 4px 20px rgba(59, 130, 246, 0.25);
     }
 
-    // Changer d'onglet
-    function switchTab(tabName) {
-      // Mettre à jour les boutons
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.remove('active');
-      });
-      event.target.classList.add('active');
+    .menu-dropdown-icon {
+      font-size: 20px;
+      transition: transform 0.3s ease;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
 
-      // Mettre à jour le contenu
-      document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-      });
-      document.getElementById(tabName).classList.add('active');
+    .menu-dropdown-current {
+      flex: 1;
+      text-align: left;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
 
-      // Charger le planning si nécessaire
-      if (tabName === 'planning') {
-        loadPlanning();
+    .menu-dropdown-chevron {
+      font-size: 12px;
+      color: var(--text-secondary);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      font-weight: 900;
+    }
+
+    .menu-dropdown-trigger.active .menu-dropdown-chevron {
+      transform: rotate(180deg);
+      color: var(--accent-blue);
+    }
+
+    .menu-dropdown-list {
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 0;
+      right: 0;
+      background: rgba(18, 18, 18, 0.98);
+      backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 10px;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      transform: translateY(-10px);
+    }
+
+    .menu-dropdown-list.active {
+      max-height: 500px;
+      opacity: 1;
+      overflow-y: auto;
+      transform: translateY(0);
+    }
+
+    .menu-dropdown-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      color: var(--text-primary);
+      min-height: 85px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .menu-dropdown-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--border-hover);
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .menu-dropdown-item.active {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    }
+
+    .menu-item-icon {
+      font-size: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+    }
+
+    .menu-item-text {
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.3;
+      max-width: 100%;
+      letter-spacing: 0.3px;
+      transition: color 0.3s ease;
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+      padding: 24px;
+    }
+
+    .section {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
 
-    // Charger le planning
-    async function loadPlanning() {
-      const content = document.getElementById('planning-content');
-      
-      // Données de démonstration
-      const events = [
-        { date: 'Lundi 21 Oct', title: 'Stream Valorant', time: '19h00 - 23h00' },
-        { date: 'Mardi 22 Oct', title: 'Stream CS2', time: '20h00 - 00h00' },
-        { date: 'Mercredi 23 Oct', title: 'Stream Variety', time: '19h30 - 23h30' },
-        { date: 'Jeudi 24 Oct', title: 'Stream Valorant', time: '19h00 - 23h00' },
-        { date: 'Vendredi 25 Oct', title: 'Stream long - CS2', time: '18h00 - 02h00' },
-        { date: 'Samedi 26 Oct', title: 'Week-end gaming', time: '16h00 - 00h00' },
-        { date: 'Dimanche 27 Oct', title: 'Chill stream', time: '17h00 - 22h00' }
-      ];
-
-      content.innerHTML = events.map(event => `
-        <div class="event-item">
-          <div class="event-date">${event.date}</div>
-          <div class="event-title">${event.title}</div>
-          <div class="event-time">⏰ ${event.time}</div>
-        </div>
-      `).join('');
+    .section-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 20px;
     }
 
-    // Initialisation
-    displayCommands();
-    
-    // Log
-    console.log('🚀 Slyraf MOD Dashboard v2.0.0');
-    console.log('📱 Mode:', window.matchMedia('(display-mode: standalone)').matches ? 'PWA' : 'Navigateur');
+    .info-box {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: var(--accent-blue);
+      font-weight: 600;
+    }
+
+    /* PARTNERS */
+    .partners-compact-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .partner-compact-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s ease;
+    }
+
+    .partner-compact-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--border-hover);
+      transform: translateX(4px);
+    }
+
+    .partner-compact-logo {
+      width: 56px;
+      height: 56px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.02);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-color);
+      font-size: 32px;
+    }
+
+    .partner-compact-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .partner-compact-name {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .partner-compact-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .partner-compact-tag.gold {
+      background: rgba(255, 215, 0, 0.15);
+      color: var(--accent-gold);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .partner-compact-tag.blue {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--accent-blue);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .partner-compact-desc {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      font-weight: 500;
+    }
+
+    .copy-btn {
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: var(--accent-blue);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .copy-btn:hover {
+      background: rgba(59, 130, 246, 0.25);
+      transform: translateY(-2px);
+    }
+
+    /* PLANNING */
+    .planning-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .planning-event-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      min-height: 120px;
+      cursor: pointer;
+    }
+
+    .planning-event-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-hover);
+      box-shadow: var(--shadow);
+    }
+
+    .planning-event-header {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.08));
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .planning-event-time {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--accent-blue);
+      letter-spacing: 0.5px;
+    }
+
+    .planning-event-date {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      font-weight: 600;
+    }
+
+    .planning-event-body {
+      padding: 14px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .planning-event-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.4;
+    }
+
+    .planning-event-card.today .planning-event-header {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(59, 130, 246, 0.15));
+    }
+
+    /* COMMANDS */
+    .commands-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .command-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .command-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--border-hover);
+    }
+
+    .command-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      text-align: center;
+    }
+
+    .copy-cmd-btn {
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: var(--accent-blue);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .copy-cmd-btn:hover {
+      background: rgba(59, 130, 246, 0.25);
+      transform: translateY(-2px);
+    }
+
+    /* SOCIALS */
+    .socials-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .social-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s ease;
+    }
+
+    .social-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-2px);
+      border-color: var(--border-hover);
+    }
+
+    .social-icon {
+      font-size: 32px;
+      flex-shrink: 0;
+    }
+
+    .social-info {
+      flex: 1;
+    }
+
+    .social-info h4 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .social-info p {
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+
+    .copy-social-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .copy-social-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+    }
+
+    /* LINKS */
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .link-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s ease;
+    }
+
+    .link-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-2px);
+      border-color: var(--border-hover);
+    }
+
+    .link-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .tool-icon {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(37, 99, 235, 0.1));
+    }
+
+    .mod-icon {
+      background: linear-gradient(135deg, rgba(145, 70, 255, 0.15), rgba(124, 58, 237, 0.1));
+    }
+
+    .link-text {
+      flex: 1;
+    }
+
+    .link-text h4 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .link-text p {
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+
+    /* TODO */
+    .todo-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .todo-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .todo-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .todo-number {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--accent-blue);
+      background: rgba(59, 130, 246, 0.15);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .todo-text {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .todo-note {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 12px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      border-left: 3px solid rgba(234, 179, 8, 0.5);
+    }
+
+    .youtube-link-card {
+      background: linear-gradient(135deg, rgba(255, 0, 0, 0.1), rgba(255, 0, 0, 0.05));
+      border: 2px solid rgba(255, 0, 0, 0.3);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      text-align: center;
+      margin-top: 16px;
+      text-decoration: none;
+    }
+
+    .youtube-icon {
+      font-size: 64px;
+    }
+
+    .youtube-content h4 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .youtube-content p {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .youtube-button {
+      background: linear-gradient(135deg, #ff0000, #cc0000);
+      color: white;
+      padding: 12px 32px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    /* LOADING & EMPTY */
+    .loading-state, .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 24px;
+      text-align: center;
+      grid-column: 1 / -1;
+    }
+
+    .loading-spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--accent-blue);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.3;
+    }
+
+    .empty-text {
+      font-size: 14px;
+      color: var(--text-tertiary);
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(18, 18, 18, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      min-width: 200px;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .toast-icon {
+      font-size: 20px;
+    }
+
+    .toast-text {
+      font-size: 13px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-top">
+        <div class="brand">
+          <div class="logo">SLYRAF</div>
+          <div class="badge">MOD</div>
+        </div>
+      </div>
+      
+      <div class="header-stats">
+        <div class="giveaway-countdown">
+          <div class="countdown-icon">🎁</div>
+          <div class="countdown-text">
+            <div class="countdown-label">Prochain Giveaway</div>
+            <div class="countdown-value" id="giveawayCountdown">
+              <span class="loading-spinner-sm"></span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="stat-card twitch" id="twitchStatusCard">
+          <div class="stat-icon">📺</div>
+          <div class="stat-content">
+            <div class="stat-label">Twitch Stream</div>
+            <div class="stat-value" id="streamStatus">
+              <span class="loading-spinner-sm"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MENU DROPDOWN -->
+      <div class="menu-dropdown-container">
+        <button class="menu-dropdown-trigger" id="menuTrigger">
+          <span class="menu-dropdown-icon">📋</span>
+          <span class="menu-dropdown-current" id="currentMenuLabel">Accueil</span>
+          <span class="menu-dropdown-chevron">▼</span>
+        </button>
+        
+        <div class="menu-dropdown-list" id="menuDropdown">
+          <button class="menu-dropdown-item active" data-section="overview">
+            <div class="menu-item-icon">🏠</div>
+            <div class="menu-item-text">Accueil</div>
+          </button>
+          <button class="menu-dropdown-item" data-section="planning">
+            <div class="menu-item-icon">📅</div>
+            <div class="menu-item-text">Planning</div>
+          </button>
+          <button class="menu-dropdown-item" data-section="commands">
+            <div class="menu-item-icon">⚡</div>
+            <div class="menu-item-text">Commandes</div>
+          </button>
+          <button class="menu-dropdown-item" data-section="socials">
+            <div class="menu-item-icon">🌐</div>
+            <div class="menu-item-text">Réseaux</div>
+          </button>
+          <button class="menu-dropdown-item" data-section="moderator">
+            <div class="menu-item-icon">🛡️</div>
+            <div class="menu-item-text">Modérateur</div>
+          </button>
+          <button class="menu-dropdown-item" data-section="tools">
+            <div class="menu-item-icon">🔧</div>
+            <div class="menu-item-text">Outils</div>
+          </button>
+          <button class="menu-dropdown-item" data-section="todo">
+            <div class="menu-item-icon">✅</div>
+            <div class="menu-item-text">To Do</div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <main class="main-content">
+      
+      <!-- SECTION: OVERVIEW -->
+      <section class="section active" id="overview">
+        <h2 class="section-title">Partenaires</h2>
+        
+        <div class="partners-compact-grid">
+          <a href="https://lootbar.gg/shop/slyraf" target="_blank" class="partner-compact-card">
+            <div class="partner-compact-logo">🎮</div>
+            <div class="partner-compact-info">
+              <div class="partner-compact-name">LOOTBAR</div>
+              <div class="partner-compact-tag gold">-30%</div>
+              <p class="partner-compact-desc">Packs gaming</p>
+            </div>
+            <button class="copy-btn" data-copy="Packs Moins Chers: https://lootbar.gg/shop/slyraf , Jades, Primo, Astrites aussi">📋</button>
+          </a>
+
+          <a href="https://www.lagofast.com/fr/?cid=839" target="_blank" class="partner-compact-card">
+            <div class="partner-compact-logo">⚡</div>
+            <div class="partner-compact-info">
+              <div class="partner-compact-name">LAGOFAST</div>
+              <div class="partner-compact-tag blue">SLYRAF</div>
+              <p class="partner-compact-desc">Ping & FPS</p>
+            </div>
+            <button class="copy-btn" data-copy="Réduis ton ping avec LagoFast ! Profite de -30% de réduction avec le code SLYRAF + traductions FR intégrées dans les jeux comme Blue Protocol 💥 https://www.lagofast.com/fr/?cid=839">📋</button>
+          </a>
+        </div>
+      </section>
+
+      <!-- SECTION: PLANNING -->
+      <section class="section" id="planning">
+        <h2 class="section-title">Planning de la semaine</h2>
+        
+        <div class="planning-grid" id="planningGrid">
+          <div class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Chargement du planning...</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: COMMANDS -->
+      <section class="section" id="commands">
+        <div class="info-box">
+          ℹ️ Si une commande manque, contactez Slyraf pour l'ajouter !
+        </div>
+        
+        <h2 class="section-title">Commandes Disponibles</h2>
+        
+        <div class="commands-grid">
+          <div class="command-card">
+            <div class="command-name">!lootbar</div>
+            <button class="copy-cmd-btn" data-copy="!lootbar">📋 Copier</button>
+          </div>
+          <div class="command-card">
+            <div class="command-name">!lagofast</div>
+            <button class="copy-cmd-btn" data-copy="!lagofast">📋 Copier</button>
+          </div>
+          <div class="command-card">
+            <div class="command-name">!discord</div>
+            <button class="copy-cmd-btn" data-copy="!discord">📋 Copier</button>
+          </div>
+          <div class="command-card">
+            <div class="command-name">!video</div>
+            <button class="copy-cmd-btn" data-copy="!video">📋 Copier</button>
+          </div>
+          <div class="command-card">
+            <div class="command-name">!youtube</div>
+            <button class="copy-cmd-btn" data-copy="!youtube">📋 Copier</button>
+          </div>
+          <div class="command-card">
+            <div class="command-name">!tiktok</div>
+            <button class="copy-cmd-btn" data-copy="!tiktok">📋 Copier</button>
+          </div>
+          <div class="command-card">
+            <div class="command-name">!sr (nom/lien)</div>
+            <button class="copy-cmd-btn" data-copy="!sr">📋 Copier</button>
+          </div>
+          <div class="command-card">
+            <div class="command-name">!skipsong</div>
+            <button class="copy-cmd-btn" data-copy="!skipsong">📋 Copier</button>
+          </div>
+          <div class="command-card">
+            <div class="command-name">!delsong</div>
+            <button class="copy-cmd-btn" data-copy="!delsong">📋 Copier</button>
+          </div>
+          <div class="command-card">
+            <div class="command-name">!playlist</div>
+            <button class="copy-cmd-btn" data-copy="!playlist">📋 Copier</button>
+          </div>
+          <div class="command-card">
+            <div class="command-name">!song</div>
+            <button class="copy-cmd-btn" data-copy="!song">📋 Copier</button>
+          </div>
+          <div class="command-card">
+            <div class="command-name">!barre</div>
+            <button class="copy-cmd-btn" data-copy="!barre">📋 Copier</button>
+          </div>
+          <div class="command-card">
+            <div class="command-name">!don</div>
+            <button class="copy-cmd-btn" data-copy="!don">📋 Copier</button>
+          </div>
+          <div class="command-card">
+            <div class="command-name">!uid</div>
+            <button class="copy-cmd-btn" data-copy="!uid">📋 Copier</button>
+          </div>
+          <div class="command-card">
+            <div class="command-name">!lurk</div>
+            <button class="copy-cmd-btn" data-copy="!lurk">📋 Copier</button>
+          </div>
+          <div class="command-card">
+            <div class="command-name">!giveaway</div>
+            <button class="copy-cmd-btn" data-copy="!giveaway">📋 Copier</button>
+          </div>
+          <div class="command-card">
+            <div class="command-name">!of</div>
+            <button class="copy-cmd-btn" data-copy="!of">📋 Copier</button>
+          </div>
+          <div class="command-card">
+            <div class="command-name">!x</div>
+            <button class="copy-cmd-btn" data-copy="!x">📋 Copier</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: SOCIALS -->
+      <section class="section" id="socials">
+        <h2 class="section-title">Réseaux Sociaux</h2>
+        
+        <div class="socials-grid">
+          <a href="https://www.twitch.tv/slyraf" target="_blank" class="social-card">
+            <div class="social-icon">📺</div>
+            <div class="social-info">
+              <h4>Twitch</h4>
+              <p>@slyraf</p>
+            </div>
+            <button class="copy-social-btn" data-copy="https://www.twitch.tv/slyraf">📋</button>
+          </a>
+
+          <a href="https://www.youtube.com/@slyraf" target="_blank" class="social-card">
+            <div class="social-icon">🎥</div>
+            <div class="social-info">
+              <h4>YouTube</h4>
+              <p>@slyraf</p>
+            </div>
+            <button class="copy-social-btn" data-copy="https://www.youtube.com/@slyraf">📋</button>
+          </a>
+
+          <a href="https://www.instagram.com/slyrafspam/" target="_blank" class="social-card">
+            <div class="social-icon">📷</div>
+            <div class="social-info">
+              <h4>Instagram</h4>
+              <p>@slyrafspam</p>
+            </div>
+            <button class="copy-social-btn" data-copy="https://www.instagram.com/slyrafspam/">📋</button>
+          </a>
+
+          <a href="https://x.com/slyraf_" target="_blank" class="social-card">
+            <div class="social-icon">✖</div>
+            <div class="social-info">
+              <h4>X (Twitter)</h4>
+              <p>@slyraf_</p>
+            </div>
+            <button class="copy-social-btn" data-copy="https://x.com/slyraf_">📋</button>
+          </a>
+
+          <a href="https://www.facebook.com/profile.php?id=61578198117348" target="_blank" class="social-card">
+            <div class="social-icon">👥</div>
+            <div class="social-info">
+              <h4>Facebook</h4>
+              <p>Slyraf</p>
+            </div>
+            <button class="copy-social-btn" data-copy="https://www.facebook.com/profile.php?id=61578198117348">📋</button>
+          </a>
+
+          <a href="https://discord.gg/EpbFqYSJgX" target="_blank" class="social-card">
+            <div class="social-icon">💬</div>
+            <div class="social-info">
+              <h4>Discord</h4>
+              <p>Rejoindre</p>
+            </div>
+            <button class="copy-social-btn" data-copy="https://discord.gg/EpbFqYSJgX">📋</button>
+          </a>
+
+          <a href="https://www.tiktok.com/@slyraf" target="_blank" class="social-card">
+            <div class="social-icon">🎵</div>
+            <div class="social-info">
+              <h4>TikTok</h4>
+              <p>@slyraf</p>
+            </div>
+            <button class="copy-social-btn" data-copy="https://www.tiktok.com/@slyraf">📋</button>
+          </a>
+        </div>
+      </section>
+
+      <!-- SECTION: MODERATOR -->
+      <section class="section" id="moderator">
+        <h2 class="section-title">Modérateur Twitch</h2>
+        
+        <div class="links-grid">
+          <a href="https://www.twitch.tv/popout/slyraf/reward-queue" target="_blank" class="link-card">
+            <div class="link-icon mod-icon">⚡</div>
+            <div class="link-text">
+              <h4>Points de chaîne</h4>
+              <p>Accepter/Refuser</p>
+            </div>
+          </a>
+
+          <a href="https://dashboard.twitch.tv/popout/u/slyraf/stream-manager/edit-stream-info?uuid=f731e7ceb95bd933579888e3b65d20fc" target="_blank" class="link-card">
+            <div class="link-icon mod-icon">✏️</div>
+            <div class="link-text">
+              <h4>Infos du stream</h4>
+              <p>Titre, catégorie</p>
+            </div>
+          </a>
+
+          <a href="https://dashboard.twitch.tv/popout/u/slyraf/stream-manager/stream-preview?uuid=fea77fed74aef545e1fc3e3bfe71cb2c" target="_blank" class="link-card">
+            <div class="link-icon mod-icon">👁️</div>
+            <div class="link-text">
+              <h4>Aperçu du stream</h4>
+              <p>Preview</p>
+            </div>
+          </a>
+
+          <a href="https://dashboard.twitch.tv/popout/u/slyraf/stream-manager/predictions" target="_blank" class="link-card">
+            <div class="link-icon mod-icon">🎲</div>
+            <div class="link-text">
+              <h4>Prédictions</h4>
+              <p>Gérer</p>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- SECTION: TOOLS -->
+      <section class="section" id="tools">
+        <h2 class="section-title">Outils de streaming</h2>
+        
+        <div class="links-grid">
+          <a href="https://www.twitch.tv/slyraf/dashboard" target="_blank" class="link-card">
+            <div class="link-icon tool-icon">📺</div>
+            <div class="link-text">
+              <h4>Twitch Dashboard</h4>
+              <p>Stream Manager</p>
+            </div>
+          </a>
+
+          <a href="https://moo.bot/slyraf" target="_blank" class="link-card">
+            <div class="link-icon tool-icon">🤖</div>
+            <div class="link-text">
+              <h4>Moobot</h4>
+              <p>Dashboard</p>
+            </div>
+          </a>
+
+          <a href="https://wizebot.tv/fr/index" target="_blank" class="link-card">
+            <div class="link-icon tool-icon">⚙️</div>
+            <div class="link-text">
+              <h4>Wizebot</h4>
+              <p>Automations</p>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- SECTION: TODO -->
+      <section class="section" id="todo">
+        <h2 class="section-title">To Do List</h2>
+        
+        <div class="todo-list">
+          <div class="todo-item">
+            <div class="todo-header">
+              <span class="todo-number">1.</span>
+              <span class="todo-text">Vérifier si la commande !video est à jour</span>
+            </div>
+            
+            <a href="https://www.youtube.com/@slyraf/videos" target="_blank" class="youtube-link-card">
+              <div class="youtube-icon">🎬</div>
+              <div class="youtube-content">
+                <h4>Vérifier manuellement</h4>
+                <p>Cliquez pour voir les dernières vidéos</p>
+              </div>
+              <span class="youtube-button">Ouvrir YouTube →</span>
+            </a>
+          </div>
+
+          <div class="todo-item">
+            <div class="todo-header">
+              <span class="todo-number">2.</span>
+              <span class="todo-text">Prévenir si vous créez une nouvelle commande</span>
+            </div>
+            <p class="todo-note">⚠️ Contactez Slyraf pour ajouter les nouvelles commandes à ce plugin</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast">
+      <span class="toast-icon"></span>
+      <span class="toast-text"></span>
+    </div>
+  </div>
+
+  <script>
+    const CALENDAR_ID = '18ca2c7c54ab73c4274cf709da7891af0603beef111b9b21f542e84414bb1c13@group.calendar.google.com';
+    const CALENDAR_URL = `https://calendar.google.com/calendar/ical/${encodeURIComponent(CALENDAR_ID)}/public/basic.ics`;
+    const TWITCH_URL = 'https://www.twitch.tv/slyraf';
+
+    let currentSection = 'overview';
+
+    // Init
+    document.addEventListener('DOMContentLoaded', () => {
+      initMenuDropdown();
+      initCopyButtons();
+      initCommandButtons();
+      initSocialCopyButtons();
+      loadStreamStatus();
+      loadGiveawayCountdown();
+    });
+
+    // Menu Dropdown
+    function initMenuDropdown() {
+      const trigger = document.getElementById('menuTrigger');
+      const dropdown = document.getElementById('menuDropdown');
+      const menuItems = document.querySelectorAll('.menu-dropdown-item');
+      const currentLabel = document.getElementById('currentMenuLabel');
+      const sections = document.querySelectorAll('.section');
+
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isActive = dropdown.classList.contains('active');
+        
+        if (isActive) {
+          dropdown.classList.remove('active');
+          trigger.classList.remove('active');
+        } else {
+          dropdown.classList.add('active');
+          trigger.classList.add('active');
+        }
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!trigger.contains(e.target) && !dropdown.contains(e.target)) {
+          dropdown.classList.remove('active');
+          trigger.classList.remove('active');
+        }
+      });
+
+      menuItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const targetSection = item.dataset.section;
+          const itemText = item.querySelector('.menu-item-text').textContent;
+
+          menuItems.forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+
+          sections.forEach(s => s.classList.remove('active'));
+          document.getElementById(targetSection).classList.add('active');
+
+          currentLabel.textContent = itemText;
+          currentSection = targetSection;
+
+          dropdown.classList.remove('active');
+          trigger.classList.remove('active');
+
+          if (targetSection === 'planning') {
+            loadPlanning();
+          }
+        });
+      });
+    }
+
+    // Copy Buttons
+    function initCopyButtons() {
+      const copyButtons = document.querySelectorAll('.copy-btn');
+      
+      copyButtons.forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          const textToCopy = btn.dataset.copy;
+          
+          try {
+            await navigator.clipboard.writeText(textToCopy);
+            showToast('✅', 'Texte copié !', 'success');
+          } catch (error) {
+            showToast('❌', 'Erreur de copie', 'error');
+          }
+        });
+      });
+    }
+
+    // Command Buttons
+    function initCommandButtons() {
+      const copyCmdButtons = document.querySelectorAll('.copy-cmd-btn');
+      copyCmdButtons.forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          const textToCopy = btn.dataset.copy;
+          
+          try {
+            await navigator.clipboard.writeText(textToCopy);
+            showToast('✅', 'Commande copiée !', 'success');
+          } catch (error) {
+            showToast('❌', 'Erreur de copie', 'error');
+          }
+        });
+      });
+    }
+
+    // Social Copy Buttons
+    function initSocialCopyButtons() {
+      const socialCopyButtons = document.querySelectorAll('.copy-social-btn');
+      
+      socialCopyButtons.forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          const url = btn.dataset.copy;
+          
+          try {
+            await navigator.clipboard.writeText(url);
+            showToast('✅', 'Lien copié !', 'success');
+          } catch (error) {
+            showToast('❌', 'Erreur de copie', 'error');
+          }
+        });
+      });
+    }
+
+    // Load Stream Status
+    async function loadStreamStatus() {
+      const streamStatusEl = document.getElementById('streamStatus');
+      const twitchCard = document.getElementById('twitchStatusCard');
+      
+      twitchCard.addEventListener('click', () => {
+        window.open(TWITCH_URL, '_blank');
+        showToast('📺', 'Ouverture de Twitch...', 'success');
+      });
+      
+      try {
+        const response = await fetch(`https://www.twitch.tv/${TWITCH_URL.split('/').pop()}`);
+        const html = await response.text();
+        
+        const isLive = html.includes('"isLiveBroadcast":true') || html.includes('isLiveBroadcast');
+        
+        if (isLive) {
+          streamStatusEl.innerHTML = '🔴 EN LIVE';
+          streamStatusEl.style.color = '#ff0000';
+          twitchCard.style.borderColor = 'rgba(255, 0, 0, 0.5)';
+          twitchCard.style.background = 'rgba(255, 0, 0, 0.05)';
+        } else {
+          streamStatusEl.innerHTML = '⚫ OFFLINE';
+          streamStatusEl.style.color = '#707070';
+        }
+      } catch (error) {
+        streamStatusEl.textContent = '⚫ OFFLINE';
+        streamStatusEl.style.color = '#707070';
+      }
+    }
+
+    // Load Giveaway Countdown
+    function loadGiveawayCountdown() {
+      const countdownEl = document.getElementById('giveawayCountdown');
+      
+      const now = new Date();
+      const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+      
+      const diff = lastDayOfMonth - now;
+      const daysLeft = Math.ceil(diff / (1000 * 60 * 60 * 24));
+      
+      if (daysLeft === 0) {
+        countdownEl.innerHTML = "🎉 Aujourd'hui !";
+        countdownEl.style.color = '#ffd700';
+      } else if (daysLeft === 1) {
+        countdownEl.innerHTML = '⏰ Demain';
+        countdownEl.style.color = '#ff6b6b';
+      } else {
+        countdownEl.innerHTML = `⏳ ${daysLeft} jour${daysLeft > 1 ? 's' : ''}`;
+        countdownEl.style.color = '#60a5fa';
+      }
+    }
+
+    // Load Planning
+    async function loadPlanning() {
+      const planningGrid = document.getElementById('planningGrid');
+      
+      planningGrid.innerHTML = '<div class="loading-state"><div class="loading-spinner"></div><p>Chargement du planning...</p></div>';
+      
+      try {
+        const response = await fetch(CALENDAR_URL);
+        const icalData = await response.text();
+        
+        const events = parseIcalEvents(icalData);
+        
+        if (!events || events.length === 0) {
+          planningGrid.innerHTML = '<div class="empty-state"><div class="empty-icon">📅</div><div class="empty-text">Aucun événement trouvé</div></div>';
+          return;
+        }
+
+        const now = new Date();
+        now.setHours(0, 0, 0, 0);
+        
+        const weekLater = new Date();
+        weekLater.setDate(weekLater.getDate() + 7);
+        weekLater.setHours(23, 59, 59, 999);
+        
+        const upcomingEvents = events.filter(event => {
+          let eventDate;
+          
+          if (event.start.dateTime) {
+            eventDate = new Date(event.start.dateTime);
+          } else if (event.start.date) {
+            eventDate = new Date(event.start.date + 'T00:00:00');
+          } else {
+            return false;
+          }
+          
+          return eventDate >= now && eventDate <= weekLater;
+        }).sort((a, b) => {
+          const dateA = new Date(a.start.dateTime || a.start.date + 'T00:00:00');
+          const dateB = new Date(b.start.dateTime || b.start.date + 'T00:00:00');
+          return dateA - dateB;
+        });
+
+        if (upcomingEvents.length === 0) {
+          planningGrid.innerHTML = '<div class="empty-state"><div class="empty-icon">📅</div><div class="empty-text">Aucun événement cette semaine</div></div>';
+          return;
+        }
+
+        planningGrid.innerHTML = '';
+        
+        upcomingEvents.forEach(event => {
+          const eventCard = createPlanningEventCard(event);
+          planningGrid.appendChild(eventCard);
+        });
+
+        showToast('✅', `${upcomingEvents.length} événement(s) chargé(s)`, 'success');
+        
+      } catch (error) {
+        planningGrid.innerHTML = '<div class="empty-state"><div class="empty-icon">❌</div><div class="empty-text">Erreur de chargement</div></div>';
+        showToast('❌', 'Erreur de chargement du planning', 'error');
+      }
+    }
+
+    // Parse iCal Events
+    function parseIcalEvents(icalString) {
+      const events = [];
+      const lines = icalString.split(/\r?\n/);
+      let currentEvent = null;
+      
+      for (let i = 0; i < lines.length; i++) {
+        let line = lines[i].trim();
+        
+        while (i + 1 < lines.length && lines[i + 1].match(/^\s/)) {
+          i++;
+          line += lines[i].trim();
+        }
+        
+        if (line === 'BEGIN:VEVENT') {
+          currentEvent = {
+            summary: '',
+            description: '',
+            start: { dateTime: null, date: null },
+            end: { dateTime: null, date: null }
+          };
+        } else if (line === 'END:VEVENT' && currentEvent) {
+          events.push(currentEvent);
+          currentEvent = null;
+        } else if (currentEvent) {
+          const colonIndex = line.indexOf(':');
+          if (colonIndex === -1) continue;
+          
+          const key = line.substring(0, colonIndex);
+          const value = line.substring(colonIndex + 1);
+          
+          if (key.startsWith('DTSTART')) {
+            currentEvent.start = parseIcalDate(key, value);
+          } else if (key.startsWith('DTEND')) {
+            currentEvent.end = parseIcalDate(key, value);
+          } else if (key === 'SUMMARY') {
+            currentEvent.summary = decodeIcalText(value);
+          } else if (key === 'DESCRIPTION') {
+            currentEvent.description = decodeIcalText(value);
+          }
+        }
+      }
+      
+      return events;
+    }
+
+    // Parse iCal Date
+    function parseIcalDate(key, value) {
+      const dateObj = { dateTime: null, date: null };
+      
+      const cleanValue = value.split(';')[0];
+      
+      if (key.includes('VALUE=DATE')) {
+        const year = cleanValue.substring(0, 4);
+        const month = cleanValue.substring(4, 6);
+        const day = cleanValue.substring(6, 8);
+        dateObj.date = `${year}-${month}-${day}`;
+      } else if (cleanValue.length >= 8) {
+        const year = cleanValue.substring(0, 4);
+        const month = cleanValue.substring(4, 6);
+        const day = cleanValue.substring(6, 8);
+        
+        if (cleanValue.length >= 15 && cleanValue.includes('T')) {
+          const hour = cleanValue.substring(9, 11) || '00';
+          const minute = cleanValue.substring(11, 13) || '00';
+          const second = cleanValue.substring(13, 15) || '00';
+          
+          const utcDate = new Date(Date.UTC(
+            parseInt(year),
+            parseInt(month) - 1,
+            parseInt(day),
+            parseInt(hour),
+            parseInt(minute),
+            parseInt(second)
+          ));
+          
+          const parisDate = new Date(utcDate.toLocaleString('en-US', { timeZone: 'Europe/Paris' }));
+          
+          const pad = (n) => n.toString().padStart(2, '0');
+          dateObj.dateTime = `${parisDate.getFullYear()}-${pad(parisDate.getMonth() + 1)}-${pad(parisDate.getDate())}T${pad(parisDate.getHours())}:${pad(parisDate.getMinutes())}:${pad(parisDate.getSeconds())}`;
+        } else {
+          dateObj.date = `${year}-${month}-${day}`;
+        }
+      }
+      
+      return dateObj;
+    }
+
+    // Decode iCal Text
+    function decodeIcalText(text) {
+      return text
+        .replace(/\\n/g, '\n')
+        .replace(/\\,/g, ',')
+        .replace(/\\;/g, ';')
+        .replace(/\\\\/g, '\\');
+    }
+
+    // Create Planning Event Card
+    function createPlanningEventCard(event) {
+      const card = document.createElement('div');
+      card.className = 'planning-event-card';
+      card.style.cursor = 'pointer';
+      
+      card.addEventListener('click', () => {
+        window.open(TWITCH_URL, '_blank');
+        showToast('📺', 'Ouverture de Twitch...', 'success');
+      });
+      
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      let eventDate;
+      if (event.start.dateTime) {
+        eventDate = new Date(event.start.dateTime);
+      } else if (event.start.date) {
+        eventDate = new Date(event.start.date);
+      } else {
+        eventDate = new Date();
+      }
+      
+      const eventDay = new Date(eventDate);
+      eventDay.setHours(0, 0, 0, 0);
+      
+      if (eventDay.getTime() === today.getTime()) {
+        card.classList.add('today');
+      }
+      
+      const header = document.createElement('div');
+      header.className = 'planning-event-header';
+      
+      const timeEl = document.createElement('div');
+      timeEl.className = 'planning-event-time';
+      
+      if (event.start.dateTime) {
+        timeEl.textContent = formatTime(eventDate);
+      } else {
+        timeEl.textContent = 'Journée';
+        timeEl.style.fontSize = '12px';
+      }
+      
+      const dateEl = document.createElement('div');
+      dateEl.className = 'planning-event-date';
+      dateEl.textContent = formatDate(eventDate);
+      
+      header.appendChild(timeEl);
+      header.appendChild(dateEl);
+      
+      const body = document.createElement('div');
+      body.className = 'planning-event-body';
+      
+      const titleEl = document.createElement('div');
+      titleEl.className = 'planning-event-title';
+      titleEl.textContent = event.summary || 'Sans titre';
+      
+      body.appendChild(titleEl);
+      
+      card.appendChild(header);
+      card.appendChild(body);
+      
+      return card;
+    }
+
+    // Format Date
+    function formatDate(date) {
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const days = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+      const dayName = days[date.getDay()];
+      return `${dayName} ${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}`;
+    }
+
+    // Format Time
+    function formatTime(date) {
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      return `${hours}:${minutes}`;
+    }
+
+    // Show Toast
+    function showToast(icon, message, type = 'info', duration = 2500) {
+      const toast = document.getElementById('toast');
+      
+      if (!toast) return;
+      
+      const toastIcon = toast.querySelector('.toast-icon');
+      const toastText = toast.querySelector('.toast-text');
+      
+      if (toastIcon) toastIcon.textContent = icon;
+      if (toastText) toastText.textContent = message;
+      
+      toast.className = 'toast show';
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, duration);
+    }
+
+    // Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => console.log('✅ Service Worker enregistré'))
+        .catch(err => console.error('❌ Erreur Service Worker:', err));
+    }
   </script>
 </body>
 </html>
