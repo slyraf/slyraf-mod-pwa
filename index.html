@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="description" content="Dashboard pour les modérateurs de Slyraf avec accès rapide aux outils et commandes">
+  <meta name="theme-color" content="#001a33">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Slyraf MOD">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Slyraf MOD Dashboard">
+  <meta property="og:description" content="Dashboard pour les modérateurs de Slyraf">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/icon-512.png">
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/icon-16.png">
+  
+  <!-- Apple Touch Icons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/icon-180.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/icon-152.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/icon-144.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/icon-120.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/icon-114.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/icon-76.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/icon-72.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/icon-60.png">
+  <link rel="apple-touch-icon" sizes="57x57" href="/icon-57.png">
+  
+  <!-- Splash Screens iOS -->
+  <link rel="apple-touch-startup-image" href="/splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)">
+  <link rel="apple-touch-startup-image" href="/splash-1668x2388.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)">
+  <link rel="apple-touch-startup-image" href="/splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)">
+  <link rel="apple-touch-startup-image" href="/splash-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)">
+  <link rel="apple-touch-startup-image" href="/splash-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)">
+  <link rel="apple-touch-startup-image" href="/splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
+  <link rel="apple-touch-startup-image" href="/splash-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)">
+  <link rel="apple-touch-startup-image" href="/splash-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)">
+  <link rel="apple-touch-startup-image" href="/splash-1242x2208.png" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)">
+  <link rel="apple-touch-startup-image" href="/splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
+  <link rel="apple-touch-startup-image" href="/splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)">
+  
+  <title>Slyraf MOD Dashboard</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: #0a0a0a;
+      color: white;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      overflow-x: hidden;
+    }
+    
+    #root {
+      min-height: 100vh;
+    }
+    
+    /* Loading screen */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, #001a33 0%, #0a0a0a 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.3s ease;
+    }
+    
+    #loading-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    .loading-logo {
+      font-size: 48px;
+      font-weight: 900;
+      letter-spacing: 4px;
+      background: linear-gradient(135deg, #3b82f6, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-top-color: #60a5fa;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.05); }
+    }
+    
+    .loading-text {
+      margin-top: 20px;
+      color: #a0a0a0;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    /* Install prompt */
+    #install-prompt {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(37, 99, 235, 0.95));
+      backdrop-filter: blur(20px);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      transform: translateY(200px);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1000;
+      display: none;
+    }
+    
+    #install-prompt.show {
+      display: block;
+      transform: translateY(0);
+    }
+    
+    .install-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    
+    .install-icon {
+      font-size: 32px;
+      flex-shrink: 0;
+    }
+    
+    .install-text h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    
+    .install-text p {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+    
+    .install-buttons {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .install-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .install-btn.primary {
+      background: white;
+      color: #3b82f6;
+    }
+    
+    .install-btn.secondary {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+    
+    .install-btn:active {
+      transform: scale(0.95);
+    }
+    
+    /* Update notification */
+    #update-notification {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      background: rgba(18, 18, 18, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      transform: translateY(-200px);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1000;
+      display: none;
+    }
+    
+    #update-notification.show {
+      display: block;
+      transform: translateY(0);
+    }
+    
+    .update-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    
+    .update-icon {
+      font-size: 24px;
+    }
+    
+    .update-text {
+      flex: 1;
+    }
+    
+    .update-text h3 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    
+    .update-text p {
+      font-size: 12px;
+      color: #a0a0a0;
+    }
+    
+    .update-btn {
+      width: 100%;
+      padding: 10px;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .update-btn:active {
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <div class="loading-logo">SLYRAF</div>
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Chargement...</div>
+  </div>
+  
+  <!-- Install Prompt -->
+  <div id="install-prompt">
+    <div class="install-content">
+      <div class="install-icon">📱</div>
+      <div class="install-text">
+        <h3>Installer l'application</h3>
+        <p>Accédez rapidement au dashboard depuis votre écran d'accueil</p>
+      </div>
+    </div>
+    <div class="install-buttons">
+      <button class="install-btn primary" id="install-btn">Installer</button>
+      <button class="install-btn secondary" id="install-dismiss">Plus tard</button>
+    </div>
+  </div>
+  
+  <!-- Update Notification -->
+  <div id="update-notification">
+    <div class="update-content">
+      <div class="update-icon">🔄</div>
+      <div class="update-text">
+        <h3>Mise à jour disponible</h3>
+        <p>Une nouvelle version de l'app est prête</p>
+      </div>
+    </div>
+    <button class="update-btn" id="update-btn">Mettre à jour</button>
+  </div>
+  
+  <!-- React App Root -->
+  <div id="root"></div>
+  
+  <!-- Service Worker Registration -->
+  <script>
+    // Configuration
+    const APP_VERSION = '2.0.0';
+    let deferredPrompt = null;
+    let newWorker = null;
+    
+    // Cacher le loading screen quand l'app est prête
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loading-screen').classList.add('hidden');
+      }, 500);
+    });
+    
+    // Enregistrer le Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker
+          .register('/service-worker.js')
+          .then((registration) => {
+            console.log('✅ Service Worker enregistré:', registration.scope);
+            
+            // Vérifier les mises à jour
+            registration.addEventListener('updatefound', () => {
+              newWorker = registration.installing;
+              
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  // Nouvelle version disponible
+                  showUpdateNotification();
+                }
+              });
+            });
+            
+            // Vérifier les mises à jour toutes les 30 minutes
+            setInterval(() => {
+              registration.update();
+            }, 30 * 60 * 1000);
+          })
+          .catch((error) => {
+            console.error('❌ Erreur Service Worker:', error);
+          });
+        
+        // Écouter les messages du Service Worker
+        navigator.serviceWorker.addEventListener('message', (event) => {
+          if (event.data && event.data.type === 'CACHE_UPDATED') {
+            console.log('📦 Cache mis à jour');
+          }
+        });
+      });
+    }
+    
+    // Gérer l'installation de la PWA
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      
+      // Afficher le prompt après 3 secondes
+      setTimeout(() => {
+        showInstallPrompt();
+      }, 3000);
+    });
+    
+    function showInstallPrompt() {
+      const prompt = document.getElementById('install-prompt');
+      if (prompt && deferredPrompt) {
+        prompt.classList.add('show');
+      }
+    }
+    
+    function hideInstallPrompt() {
+      const prompt = document.getElementById('install-prompt');
+      if (prompt) {
+        prompt.classList.remove('show');
+      }
+    }
+    
+    // Bouton Installer
+    document.getElementById('install-btn')?.addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      
+      console.log(`Installation: ${outcome}`);
+      deferredPrompt = null;
+      hideInstallPrompt();
+    });
+    
+    // Bouton Plus tard
+    document.getElementById('install-dismiss')?.addEventListener('click', () => {
+      hideInstallPrompt();
+      
+      // Ne plus afficher pendant 7 jours
+      localStorage.setItem('installPromptDismissed', Date.now());
+    });
+    
+    // Vérifier si le prompt a été fermé récemment
+    const dismissedTime = localStorage.getItem('installPromptDismissed');
+    if (dismissedTime) {
+      const daysSince = (Date.now() - parseInt(dismissedTime)) / (1000 * 60 * 60 * 24);
+      if (daysSince < 7) {
+        deferredPrompt = null;
+      }
+    }
+    
+    // Après installation
+    window.addEventListener('appinstalled', () => {
+      console.log('✅ PWA installée');
+      deferredPrompt = null;
+      hideInstallPrompt();
+      
+      // Analytics ou notification
+      if ('serviceWorker' in navigator && 'Notification' in window) {
+        Notification.requestPermission();
+      }
+    });
+    
+    // Notification de mise à jour
+    function showUpdateNotification() {
+      const notification = document.getElementById('update-notification');
+      if (notification) {
+        notification.classList.add('show');
+      }
+    }
+    
+    function hideUpdateNotification() {
+      const notification = document.getElementById('update-notification');
+      if (notification) {
+        notification.classList.remove('show');
+      }
+    }
+    
+    // Bouton Mettre à jour
+    document.getElementById('update-btn')?.addEventListener('click', () => {
+      if (newWorker) {
+        newWorker.postMessage({ type: 'SKIP_WAITING' });
+      }
+      
+      hideUpdateNotification();
+      
+      // Recharger la page après activation
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        window.location.reload();
+      });
+    });
+    
+    // Gestion hors ligne
+    window.addEventListener('online', () => {
+      console.log('🌐 Connexion rétablie');
+      // Vous pouvez afficher une notification ici
+    });
+    
+    window.addEventListener('offline', () => {
+      console.log('📡 Mode hors ligne');
+      // Vous pouvez afficher une notification ici
+    });
+    
+    // Prévenir le zoom sur double-tap (iOS)
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', (event) => {
+      const now = Date.now();
+      if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+      }
+      lastTouchEnd = now;
+    }, false);
+    
+    // Pull to refresh personnalisé (optionnel)
+    let startY = 0;
+    let pulling = false;
+    
+    document.addEventListener('touchstart', (e) => {
+      if (window.scrollY === 0) {
+        startY = e.touches[0].pageY;
+        pulling = true;
+      }
+    });
+    
+    document.addEventListener('touchmove', (e) => {
+      if (!pulling) return;
+      
+      const currentY = e.touches[0].pageY;
+      const pullDistance = currentY - startY;
+      
+      if (pullDistance > 100) {
+        // Vous pouvez ajouter une animation de refresh ici
+      }
+    });
+    
+    document.addEventListener('touchend', () => {
+      if (pulling) {
+        pulling = false;
+        startY = 0;
+      }
+    });
+    
+    // Log de la version
+    console.log(`🚀 Slyraf MOD Dashboard v${APP_VERSION}`);
+    console.log('📱 Mode:', window.matchMedia('(display-mode: standalone)').matches ? 'PWA' : 'Navigateur');
+  </script>
+  
+  <!-- React et ReactDOM depuis CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  
+  <!-- Votre application React (à compiler avec Babel ou bundler) -->
+  <script type="module">
+    // Import de votre composant React ici
+    // En production, vous utiliserez un bundler comme Vite, Webpack, ou Parcel
+  </script>
+</body>
+</html>
