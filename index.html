@@ -11,6 +11,7 @@
   
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png">
+  <link rel="apple-touch-icon" href="/icon-192.png">
   
   <title>Slyraf MOD Dashboard</title>
   
@@ -1283,6 +1284,11 @@
     const TWITCH_URL = 'https://www.twitch.tv/slyraf';
 
     let currentSection = 'overview';
+    let refreshIntervals = {
+      twitch: null,
+      planning: null,
+      giveaway: null
+    };
 
     // Init
     document.addEventListener('DOMContentLoaded', () => {
@@ -1290,8 +1296,20 @@
       initCopyButtons();
       initCommandButtons();
       initSocialCopyButtons();
+      
+      // Chargement initial
       loadStreamStatus();
       loadGiveawayCountdown();
+      
+      // Auto-refresh toutes les 2 minutes pour Twitch
+      refreshIntervals.twitch = setInterval(() => {
+        loadStreamStatus();
+      }, 120000); // 2 minutes
+      
+      // Auto-refresh toutes les heures pour le giveaway countdown
+      refreshIntervals.giveaway = setInterval(() => {
+        loadGiveawayCountdown();
+      }, 3600000); // 1 heure
     });
 
     // Menu Dropdown
@@ -1341,6 +1359,22 @@
 
           if (targetSection === 'planning') {
             loadPlanning();
+            
+            // Auto-refresh toutes les 5 minutes quand on est sur la page planning
+            if (refreshIntervals.planning) {
+              clearInterval(refreshIntervals.planning);
+            }
+            refreshIntervals.planning = setInterval(() => {
+              if (currentSection === 'planning') {
+                loadPlanning();
+              }
+            }, 300000); // 5 minutes
+          } else {
+            // Nettoyer l'interval si on quitte la page planning
+            if (refreshIntervals.planning) {
+              clearInterval(refreshIntervals.planning);
+              refreshIntervals.planning = null;
+            }
           }
         });
       });
@@ -1513,7 +1547,7 @@
           planningGrid.appendChild(eventCard);
         });
 
-        showToast('✅', `${upcomingEvents.length} événement(s) chargé(s)`, 'success');
+        console.log(`✅ ${upcomingEvents.length} événement(s) chargé(s)`);
         
       } catch (error) {
         planningGrid.innerHTML = '<div class="empty-state"><div class="empty-icon">❌</div><div class="empty-text">Erreur de chargement</div></div>';
@@ -1717,6 +1751,13 @@
         toast.classList.remove('show');
       }, duration);
     }
+
+    // Nettoyage des intervals au déchargement de la page
+    window.addEventListener('beforeunload', () => {
+      if (refreshIntervals.twitch) clearInterval(refreshIntervals.twitch);
+      if (refreshIntervals.planning) clearInterval(refreshIntervals.planning);
+      if (refreshIntervals.giveaway) clearInterval(refreshIntervals.giveaway);
+    });
 
     // Service Worker
     if ('serviceWorker' in navigator) {
