@@ -18,7 +18,9 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       console.log('[SW] Cache ouvert');
-      return cache.addAll(STATIC_ASSETS);
+      return cache.addAll(STATIC_ASSETS).catch(err => {
+        console.error('[SW] Erreur lors du cache des assets:', err);
+      });
     }).then(() => {
       return self.skipWaiting();
     })
@@ -32,12 +34,12 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME && cacheName !== CALENDAR_CACHE) {
+        cacheNames
+          .filter(cacheName => cacheName !== CACHE_NAME && cacheName !== CALENDAR_CACHE)
+          .map(cacheName => {
             console.log('[SW] Suppression ancien cache:', cacheName);
             return caches.delete(cacheName);
-          }
-        })
+          })
       );
     }).then(() => {
       return self.clients.claim();
@@ -58,46 +60,10 @@ self.addEventListener('fetch', (event) => {
   // Requêtes vers Google Calendar iCal
   if (url.hostname === 'calendar.google.com' && url.pathname.includes('/ical/')) {
     event.respondWith(
-      caches.open(CALENDAR_CACHE).then(async (cache) => {
-        try {
-          // Force un rafraîchissement à chaque appel (pour éviter un vieux cache)
-          const fetchUrl = request.url + '?v=' + Date.now();
-          const networkResponse = await fetch(fetchUrl);
-          
-          // Sauvegarder avec un en-tête 'date' pour savoir quand c'était stocké
-          const data = await networkResponse.clone().text();
-          await cache.put(request, new Response(data, {
-            headers: {
-              'Content-Type': 'text/calendar',
-              'date': new Date().toUTCString()
-            }
-          }));
-  
-          console.log('[SW] Calendrier mis à jour depuis le réseau');
-          return networkResponse;
-        } catch (err) {
-          // Si erreur → utiliser cache s’il existe
-          const cached = await cache.match(request);
-          if (cached) {
-            const cachedDate = new Date(cached.headers.get('date'));
-            const now = new Date();
-            const diffMinutes = (now - cachedDate) / 1000 / 60;
-            
-            if (diffMinutes < 10) {
-              console.log('[SW] Utilisation du cache calendrier récent');
-              return cached;
-            }
-          }
-          console.warn('[SW] Aucun cache valide, calendrier vide');
-          return new Response('BEGIN:VCALENDAR\nEND:VCALENDAR', { 
-            headers: { 'Content-Type': 'text/calendar' }
-          });
-        }
-      })
+      handleCalendarRequest(request)
     );
     return;
   }
-  
 
   // Requêtes vers Twitch (pas de cache)
   if (url.hostname.includes('twitch.tv')) {
@@ -122,6 +88,9 @@ self.addEventListener('fetch', (event) => {
             });
           }
           return response;
+        }).catch(err => {
+          console.error('[SW] Erreur fetch asset:', err);
+          throw err;
         });
       })
     );
@@ -136,7 +105,96 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// Gestion des notifications push (futur)
+// Fonction dédiée pour gérer le calendrier
+async function handleCalendarRequest(request) {
+  const cache = await caches.open(CALENDAR_CACHE);
+  const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 minutes
+  
+  try {
+    // Vérifier d'abord le cache
+    const cachedResponse = await cache.match(request);
+    
+    if (cachedResponse) {
+      const cachedDate = cachedResponse.headers.get('x-cached-date');
+      if (cachedDate) {
+        const cacheAge = Date.now() - parseInt(cachedDate);
+        
+        // Si le cache a moins de 5 minutes, l'utiliser
+        if (cacheAge < CACHE_DURATION_MS) {
+          console.log('[SW] Utilisation du cache calendrier (âge: ' + Math.round(cacheAge/1000) + 's)');
+          
+          // Déclencher une mise à jour en arrière-plan
+          fetchAndCacheCalendar(request, cache).catch(err => 
+            console.warn('[SW] Mise à jour arrière-plan échouée:', err)
+          );
+          
+          return cachedResponse;
+        }
+      }
+    }
+    
+    // Sinon, essayer le réseau
+    console.log('[SW] Récupération calendrier depuis le réseau...');
+    const networkResponse = await fetch(request);
+    
+    if (networkResponse.ok) {
+      await cacheCalendarResponse(request, networkResponse.clone(), cache);
+      return networkResponse;
+    }
+    
+    // Si le réseau échoue mais qu'on a un cache, l'utiliser
+    if (cachedResponse) {
+      console.warn('[SW] Réseau échoué, utilisation cache ancien');
+      return cachedResponse;
+    }
+    
+    throw new Error('Pas de réponse réseau ni cache disponible');
+    
+  } catch (err) {
+    console.error('[SW] Erreur calendrier:', err);
+    
+    // Dernière chance : vérifier le cache même expiré
+    const cachedResponse = await cache.match(request);
+    if (cachedResponse) {
+      console.warn('[SW] Utilisation cache expiré en dernier recours');
+      return cachedResponse;
+    }
+    
+    // Retourner un calendrier vide valide
+    return new Response('BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Slyraf//MOD Dashboard//FR\nEND:VCALENDAR', { 
+      status: 200,
+      headers: { 
+        'Content-Type': 'text/calendar; charset=utf-8'
+      }
+    });
+  }
+}
+
+// Fonction pour mettre en cache le calendrier
+async function cacheCalendarResponse(request, response, cache) {
+  const data = await response.text();
+  
+  const cachedResponse = new Response(data, {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/calendar; charset=utf-8',
+      'x-cached-date': Date.now().toString()
+    }
+  });
+  
+  await cache.put(request, cachedResponse);
+  console.log('[SW] Calendrier mis en cache');
+}
+
+// Fonction pour fetch et cache en arrière-plan
+async function fetchAndCacheCalendar(request, cache) {
+  const response = await fetch(request);
+  if (response.ok) {
+    await cacheCalendarResponse(request, response, cache);
+  }
+}
+
+// Gestion des notifications push
 self.addEventListener('push', (event) => {
   const data = event.data ? event.data.json() : {};
   
@@ -163,13 +221,11 @@ self.addEventListener('notificationclick', (event) => {
   
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
-      // Si une fenêtre est déjà ouverte, la focus
       for (const client of clientList) {
         if (client.url === url && 'focus' in client) {
           return client.focus();
         }
       }
-      // Sinon ouvrir une nouvelle fenêtre
       if (clients.openWindow) {
         return clients.openWindow(url);
       }
@@ -177,7 +233,7 @@ self.addEventListener('notificationclick', (event) => {
   );
 });
 
-// Synchronisation en arrière-plan (futur)
+// Synchronisation en arrière-plan
 self.addEventListener('sync', (event) => {
   if (event.tag === 'sync-calendar') {
     event.waitUntil(syncCalendar());
@@ -190,17 +246,16 @@ async function syncCalendar() {
     const CALENDAR_URL = `https://calendar.google.com/calendar/ical/${encodeURIComponent(CALENDAR_ID)}/public/basic.ics`;
     
     const response = await fetch(CALENDAR_URL);
-    const data = await response.text();
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
     
     const cache = await caches.open(CALENDAR_CACHE);
-    await cache.put(CALENDAR_URL, new Response(data, {
-      headers: {
-        'Content-Type': 'text/calendar',
-        'date': new Date().toUTCString()
-      }
-    }));
+    const request = new Request(CALENDAR_URL);
+    await cacheCalendarResponse(request, response, cache);
     
-    console.log('[SW] Calendrier synchronisé');
+    console.log('[SW] Calendrier synchronisé avec succès');
   } catch (error) {
     console.error('[SW] Erreur sync calendrier:', error);
   }
