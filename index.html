@@ -5,47 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
   <meta name="description" content="Dashboard pour les modérateurs de Slyraf avec accès rapide aux outils et commandes">
   <meta name="theme-color" content="#001a33">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Slyraf MOD">
-  
-  <!-- Open Graph -->
-  <meta property="og:title" content="Slyraf MOD Dashboard">
-  <meta property="og:description" content="Dashboard pour les modérateurs de Slyraf">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="/icon-512.png">
-  
-  <!-- PWA Manifest -->
-  <link rel="manifest" href="/manifest.json">
-  
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/icon-16.png">
-  
-  <!-- Apple Touch Icons -->
-  <link rel="apple-touch-icon" sizes="180x180" href="/icon-180.png">
-  <link rel="apple-touch-icon" sizes="152x152" href="/icon-152.png">
-  <link rel="apple-touch-icon" sizes="144x144" href="/icon-144.png">
-  <link rel="apple-touch-icon" sizes="120x120" href="/icon-120.png">
-  <link rel="apple-touch-icon" sizes="114x114" href="/icon-114.png">
-  <link rel="apple-touch-icon" sizes="76x76" href="/icon-76.png">
-  <link rel="apple-touch-icon" sizes="72x72" href="/icon-72.png">
-  <link rel="apple-touch-icon" sizes="60x60" href="/icon-60.png">
-  <link rel="apple-touch-icon" sizes="57x57" href="/icon-57.png">
-  
-  <!-- Splash Screens iOS -->
-  <link rel="apple-touch-startup-image" href="/splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)">
-  <link rel="apple-touch-startup-image" href="/splash-1668x2388.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)">
-  <link rel="apple-touch-startup-image" href="/splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)">
-  <link rel="apple-touch-startup-image" href="/splash-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)">
-  <link rel="apple-touch-startup-image" href="/splash-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)">
-  <link rel="apple-touch-startup-image" href="/splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
-  <link rel="apple-touch-startup-image" href="/splash-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)">
-  <link rel="apple-touch-startup-image" href="/splash-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)">
-  <link rel="apple-touch-startup-image" href="/splash-1242x2208.png" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)">
-  <link rel="apple-touch-startup-image" href="/splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
-  <link rel="apple-touch-startup-image" href="/splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)">
-  
   <title>Slyraf MOD Dashboard</title>
   
   <style>
@@ -56,464 +15,568 @@
     }
     
     body {
-      background: #0a0a0a;
+      background: linear-gradient(180deg, #001a33 0%, #0a0a0a 100%);
       color: white;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      min-height: 100vh;
       overflow-x: hidden;
     }
-    
-    #root {
-      min-height: 100vh;
-    }
-    
-    /* Loading screen */
-    #loading-screen {
-      position: fixed;
+
+    .header {
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(20px);
+      padding: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: sticky;
       top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(180deg, #001a33 0%, #0a0a0a 100%);
+      z-index: 100;
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      transition: opacity 0.3s ease;
     }
-    
-    #loading-screen.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-    
-    .loading-logo {
-      font-size: 48px;
+
+    .logo {
+      font-size: 24px;
       font-weight: 900;
-      letter-spacing: 4px;
+      letter-spacing: 2px;
       background: linear-gradient(135deg, #3b82f6, #60a5fa);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      margin-bottom: 20px;
-      animation: pulse 2s ease-in-out infinite;
     }
-    
-    .loading-spinner {
-      width: 50px;
-      height: 50px;
-      border: 4px solid rgba(255, 255, 255, 0.1);
-      border-top-color: #60a5fa;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.8; transform: scale(1.05); }
-    }
-    
-    .loading-text {
-      margin-top: 20px;
-      color: #a0a0a0;
-      font-size: 14px;
-      font-weight: 600;
-    }
-    
-    /* Install prompt */
-    #install-prompt {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      right: 20px;
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(37, 99, 235, 0.95));
-      backdrop-filter: blur(20px);
-      border-radius: 16px;
-      padding: 16px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-      transform: translateY(200px);
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      z-index: 1000;
-      display: none;
-    }
-    
-    #install-prompt.show {
-      display: block;
-      transform: translateY(0);
-    }
-    
-    .install-content {
+
+    .status {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
+      gap: 8px;
+      font-size: 14px;
+      padding: 8px 16px;
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      border-radius: 20px;
     }
-    
-    .install-icon {
-      font-size: 32px;
-      flex-shrink: 0;
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      animation: pulse-dot 2s ease-in-out infinite;
     }
-    
-    .install-text h3 {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 4px;
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.2); }
     }
-    
-    .install-text p {
-      font-size: 13px;
-      opacity: 0.9;
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
     }
-    
-    .install-buttons {
+
+    .nav-tabs {
       display: flex;
       gap: 8px;
+      margin-bottom: 24px;
+      overflow-x: auto;
+      padding-bottom: 8px;
     }
-    
-    .install-btn {
-      flex: 1;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s ease;
+
+    .nav-tabs::-webkit-scrollbar {
+      height: 4px;
     }
-    
-    .install-btn.primary {
-      background: white;
-      color: #3b82f6;
-    }
-    
-    .install-btn.secondary {
+
+    .nav-tabs::-webkit-scrollbar-thumb {
       background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+    }
+
+    .tab-btn {
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      border-color: transparent;
       color: white;
+      box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
     }
-    
-    .install-btn:active {
-      transform: scale(0.95);
+
+    .tab-btn:hover:not(.active) {
+      background: rgba(255, 255, 255, 0.1);
     }
-    
-    /* Update notification */
-    #update-notification {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      right: 20px;
-      background: rgba(18, 18, 18, 0.95);
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
       backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .command-card {
+      background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 12px;
       padding: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      transform: translateY(-200px);
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      z-index: 1000;
-      display: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
     }
-    
-    #update-notification.show {
-      display: block;
+
+    .command-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(59, 130, 246, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .command-card:active {
       transform: translateY(0);
     }
-    
-    .update-content {
+
+    .command-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #60a5fa;
+      margin-bottom: 8px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .command-desc {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.5;
+    }
+
+    .event-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .event-date {
+      font-size: 12px;
+      color: #60a5fa;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .event-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .event-time {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .quick-action {
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 12px;
-    }
-    
-    .update-icon {
-      font-size: 24px;
-    }
-    
-    .update-text {
-      flex: 1;
-    }
-    
-    .update-text h3 {
-      font-size: 14px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-    
-    .update-text p {
-      font-size: 12px;
-      color: #a0a0a0;
-    }
-    
-    .update-btn {
-      width: 100%;
-      padding: 10px;
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
-      border: none;
-      border-radius: 8px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      text-decoration: none;
       color: white;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
       transition: all 0.2s ease;
     }
-    
-    .update-btn:active {
-      transform: scale(0.95);
+
+    .quick-action:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(59, 130, 246, 0.5);
+      transform: translateX(4px);
+    }
+
+    .quick-action-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .quick-action-text {
+      flex: 1;
+    }
+
+    .quick-action-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .quick-action-desc {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: white;
+      font-size: 14px;
+      margin-bottom: 16px;
+      transition: all 0.2s ease;
+    }
+
+    .search-box:focus {
+      outline: none;
+      border-color: #3b82f6;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .search-box::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(34, 197, 94, 0.95);
+      backdrop-filter: blur(20px);
+      padding: 12px 24px;
+      border-radius: 12px;
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top-color: #60a5fa;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
   </style>
 </head>
 <body>
-  <!-- Loading Screen -->
-  <div id="loading-screen">
-    <div class="loading-logo">SLYRAF</div>
-    <div class="loading-spinner"></div>
-    <div class="loading-text">Chargement...</div>
-  </div>
-  
-  <!-- Install Prompt -->
-  <div id="install-prompt">
-    <div class="install-content">
-      <div class="install-icon">📱</div>
-      <div class="install-text">
-        <h3>Installer l'application</h3>
-        <p>Accédez rapidement au dashboard depuis votre écran d'accueil</p>
+  <div class="header">
+    <div class="header-content">
+      <div class="logo">SLYRAF MOD</div>
+      <div class="status">
+        <div class="status-dot"></div>
+        <span>En ligne</span>
       </div>
     </div>
-    <div class="install-buttons">
-      <button class="install-btn primary" id="install-btn">Installer</button>
-      <button class="install-btn secondary" id="install-dismiss">Plus tard</button>
-    </div>
   </div>
-  
-  <!-- Update Notification -->
-  <div id="update-notification">
-    <div class="update-content">
-      <div class="update-icon">🔄</div>
-      <div class="update-text">
-        <h3>Mise à jour disponible</h3>
-        <p>Une nouvelle version de l'app est prête</p>
+
+  <div class="container">
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('home')">🏠 Accueil</button>
+      <button class="tab-btn" onclick="switchTab('commands')">⚡ Commandes</button>
+      <button class="tab-btn" onclick="switchTab('planning')">📅 Planning</button>
+      <button class="tab-btn" onclick="switchTab('tools')">🛠️ Outils</button>
+    </div>
+
+    <!-- Accueil -->
+    <div id="home" class="tab-content active">
+      <div class="card">
+        <div class="card-title">🚀 Actions rapides</div>
+        <div class="grid">
+          <a href="https://www.twitch.tv/slyraf" target="_blank" class="quick-action">
+            <div class="quick-action-icon">📺</div>
+            <div class="quick-action-text">
+              <div class="quick-action-title">Chaîne Twitch</div>
+              <div class="quick-action-desc">Ouvrir le stream</div>
+            </div>
+          </a>
+          <a href="https://dashboard.twitch.tv/u/slyraf/stream-manager" target="_blank" class="quick-action">
+            <div class="quick-action-icon">⚙️</div>
+            <div class="quick-action-text">
+              <div class="quick-action-title">Dashboard Twitch</div>
+              <div class="quick-action-desc">Gérer le stream</div>
+            </div>
+          </a>
+          <a href="https://calendar.google.com/calendar/u/0/r?cid=18ca2c7c54ab73c4274cf709da7891af0603beef111b9b21f542e84414bb1c13@group.calendar.google.com" target="_blank" class="quick-action">
+            <div class="quick-action-icon">📆</div>
+            <div class="quick-action-text">
+              <div class="quick-action-title">Calendrier</div>
+              <div class="quick-action-desc">Voir le planning complet</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📊 Statistiques rapides</div>
+        <div class="grid">
+          <div class="command-card">
+            <div class="command-name">Commandes totales</div>
+            <div class="command-desc" style="font-size: 24px; font-weight: 700; color: #60a5fa; margin-top: 8px;">50+</div>
+          </div>
+          <div class="command-card">
+            <div class="command-name">Dernière MàJ</div>
+            <div class="command-desc" style="font-size: 16px; font-weight: 600; color: #22c55e; margin-top: 8px;">Aujourd'hui</div>
+          </div>
+        </div>
       </div>
     </div>
-    <button class="update-btn" id="update-btn">Mettre à jour</button>
+
+    <!-- Commandes -->
+    <div id="commands" class="tab-content">
+      <div class="card">
+        <div class="card-title">⚡ Commandes Twitch</div>
+        <input type="text" class="search-box" placeholder="Rechercher une commande..." onkeyup="searchCommands(this.value)">
+        <div id="commands-grid" class="grid">
+          <!-- Les commandes seront ajoutées ici par JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Planning -->
+    <div id="planning" class="tab-content">
+      <div class="card">
+        <div class="card-title">📅 Planning de la semaine</div>
+        <div id="planning-content">
+          <div class="loading">
+            <div class="spinner"></div>
+            <div>Chargement du planning...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Outils -->
+    <div id="tools" class="tab-content">
+      <div class="card">
+        <div class="card-title">🛠️ Outils et liens utiles</div>
+        <div class="grid">
+          <a href="https://lagofast.com" target="_blank" class="quick-action">
+            <div class="quick-action-icon">🚀</div>
+            <div class="quick-action-text">
+              <div class="quick-action-title">LagoFast</div>
+              <div class="quick-action-desc">Optimisation réseau</div>
+            </div>
+          </a>
+          <a href="https://lootbar.gg" target="_blank" class="quick-action">
+            <div class="quick-action-icon">🎮</div>
+            <div class="quick-action-text">
+              <div class="quick-action-title">LootBar</div>
+              <div class="quick-action-desc">Services gaming</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
-  
-  <!-- React App Root -->
-  <div id="root"></div>
-  
-  <!-- Service Worker Registration -->
+
+  <div id="toast" class="toast"></div>
+
   <script>
-    // Configuration
-    const APP_VERSION = '2.0.0';
-    let deferredPrompt = null;
-    let newWorker = null;
-    
-    // Cacher le loading screen quand l'app est prête
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        document.getElementById('loading-screen').classList.add('hidden');
-      }, 500);
-    });
-    
-    // Enregistrer le Service Worker
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker
-          .register('/service-worker.js')
-          .then((registration) => {
-            console.log('✅ Service Worker enregistré:', registration.scope);
-            
-            // Vérifier les mises à jour
-            registration.addEventListener('updatefound', () => {
-              newWorker = registration.installing;
-              
-              newWorker.addEventListener('statechange', () => {
-                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                  // Nouvelle version disponible
-                  showUpdateNotification();
-                }
-              });
-            });
-            
-            // Vérifier les mises à jour toutes les 30 minutes
-            setInterval(() => {
-              registration.update();
-            }, 30 * 60 * 1000);
-          })
-          .catch((error) => {
-            console.error('❌ Erreur Service Worker:', error);
-          });
-        
-        // Écouter les messages du Service Worker
-        navigator.serviceWorker.addEventListener('message', (event) => {
-          if (event.data && event.data.type === 'CACHE_UPDATED') {
-            console.log('📦 Cache mis à jour');
-          }
-        });
+    // Liste des commandes
+    const commands = [
+      { name: '!discord', desc: 'Lien vers le serveur Discord de la communauté' },
+      { name: '!planning', desc: 'Affiche le planning des streams de la semaine' },
+      { name: '!commandes', desc: 'Liste toutes les commandes disponibles' },
+      { name: '!jeu', desc: 'Affiche le jeu actuellement joué' },
+      { name: '!social', desc: 'Tous les réseaux sociaux de Slyraf' },
+      { name: '!twitter', desc: 'Lien vers le Twitter/X de Slyraf' },
+      { name: '!youtube', desc: 'Lien vers la chaîne YouTube' },
+      { name: '!instagram', desc: 'Lien vers Instagram' },
+      { name: '!tiktok', desc: 'Lien vers TikTok' },
+      { name: '!config', desc: 'Configuration PC et périphériques' },
+      { name: '!setup', desc: 'Détails du setup streaming' },
+      { name: '!cam', desc: 'Informations sur la caméra utilisée' },
+      { name: '!micro', desc: 'Informations sur le microphone' },
+      { name: '!clavier', desc: 'Modèle du clavier' },
+      { name: '!souris', desc: 'Modèle de la souris' },
+      { name: '!casque', desc: 'Modèle du casque' },
+      { name: '!sub', desc: 'Informations sur les abonnements' },
+      { name: '!prime', desc: 'Comment utiliser Twitch Prime' },
+      { name: '!vip', desc: 'Informations sur le statut VIP' },
+      { name: '!modo', desc: 'Comment devenir modérateur' },
+      { name: '!partenaire', desc: 'Informations partenariats' },
+      { name: '!sponsor', desc: 'Sponsors actuels' },
+      { name: '!lagofast', desc: 'Code promo LagoFast' },
+      { name: '!lootbar', desc: 'Code promo LootBar' },
+      { name: '!don', desc: 'Lien pour faire un don' },
+      { name: '!merch', desc: 'Boutique de merchandising' },
+      { name: '!age', desc: 'Âge de Slyraf' },
+      { name: '!pays', desc: 'Pays/Ville' },
+      { name: '!game', desc: 'Jeu principal du moment' },
+      { name: '!rank', desc: 'Rang actuel dans le jeu' },
+      { name: '!sensi', desc: 'Sensibilité et paramètres de jeu' },
+      { name: '!crosshair', desc: 'Configuration du viseur' },
+      { name: '!video', desc: 'Paramètres vidéo en jeu' },
+      { name: '!son', desc: 'Configuration audio' },
+      { name: '!uptime', desc: 'Durée du stream en cours' },
+      { name: '!followage', desc: 'Depuis quand tu follow' },
+      { name: '!viewer', desc: 'Nombre de viewers' },
+      { name: '!record', desc: 'Record de viewers' },
+      { name: '!title', desc: 'Titre du stream' },
+      { name: '!song', desc: 'Musique en cours' },
+      { name: '!playlist', desc: 'Lien vers la playlist' },
+      { name: '!clip', desc: 'Créer un clip' },
+      { name: '!topclip', desc: 'Meilleurs clips' },
+      { name: '!highlight', desc: 'Derniers highlights' },
+      { name: '!vod', desc: 'Lien vers les VODs' },
+      { name: '!schedule', desc: 'Horaires de stream' },
+      { name: '!nextstream', desc: 'Prochain stream prévu' },
+      { name: '!rules', desc: 'Règles du chat' },
+      { name: '!faq', desc: 'Questions fréquentes' },
+      { name: '!lurk', desc: 'Mode lurk activé' },
+      { name: '!back', desc: 'Retour de lurk' }
+    ];
+
+    // Afficher les commandes
+    function displayCommands(filteredCommands = commands) {
+      const grid = document.getElementById('commands-grid');
+      grid.innerHTML = filteredCommands.map(cmd => `
+        <div class="command-card" onclick="copyCommand('${cmd.name}')">
+          <div class="command-name">${cmd.name}</div>
+          <div class="command-desc">${cmd.desc}</div>
+        </div>
+      `).join('');
+    }
+
+    // Recherche de commandes
+    function searchCommands(query) {
+      const filtered = commands.filter(cmd => 
+        cmd.name.toLowerCase().includes(query.toLowerCase()) ||
+        cmd.desc.toLowerCase().includes(query.toLowerCase())
+      );
+      displayCommands(filtered);
+    }
+
+    // Copier une commande
+    function copyCommand(cmd) {
+      navigator.clipboard.writeText(cmd).then(() => {
+        showToast(`${cmd} copié !`);
       });
     }
-    
-    // Gérer l'installation de la PWA
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      
-      // Afficher le prompt après 3 secondes
+
+    // Afficher un toast
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
       setTimeout(() => {
-        showInstallPrompt();
-      }, 3000);
-    });
-    
-    function showInstallPrompt() {
-      const prompt = document.getElementById('install-prompt');
-      if (prompt && deferredPrompt) {
-        prompt.classList.add('show');
-      }
+        toast.classList.remove('show');
+      }, 2000);
     }
-    
-    function hideInstallPrompt() {
-      const prompt = document.getElementById('install-prompt');
-      if (prompt) {
-        prompt.classList.remove('show');
-      }
-    }
-    
-    // Bouton Installer
-    document.getElementById('install-btn')?.addEventListener('click', async () => {
-      if (!deferredPrompt) return;
-      
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      
-      console.log(`Installation: ${outcome}`);
-      deferredPrompt = null;
-      hideInstallPrompt();
-    });
-    
-    // Bouton Plus tard
-    document.getElementById('install-dismiss')?.addEventListener('click', () => {
-      hideInstallPrompt();
-      
-      // Ne plus afficher pendant 7 jours
-      localStorage.setItem('installPromptDismissed', Date.now());
-    });
-    
-    // Vérifier si le prompt a été fermé récemment
-    const dismissedTime = localStorage.getItem('installPromptDismissed');
-    if (dismissedTime) {
-      const daysSince = (Date.now() - parseInt(dismissedTime)) / (1000 * 60 * 60 * 24);
-      if (daysSince < 7) {
-        deferredPrompt = null;
-      }
-    }
-    
-    // Après installation
-    window.addEventListener('appinstalled', () => {
-      console.log('✅ PWA installée');
-      deferredPrompt = null;
-      hideInstallPrompt();
-      
-      // Analytics ou notification
-      if ('serviceWorker' in navigator && 'Notification' in window) {
-        Notification.requestPermission();
-      }
-    });
-    
-    // Notification de mise à jour
-    function showUpdateNotification() {
-      const notification = document.getElementById('update-notification');
-      if (notification) {
-        notification.classList.add('show');
-      }
-    }
-    
-    function hideUpdateNotification() {
-      const notification = document.getElementById('update-notification');
-      if (notification) {
-        notification.classList.remove('show');
-      }
-    }
-    
-    // Bouton Mettre à jour
-    document.getElementById('update-btn')?.addEventListener('click', () => {
-      if (newWorker) {
-        newWorker.postMessage({ type: 'SKIP_WAITING' });
-      }
-      
-      hideUpdateNotification();
-      
-      // Recharger la page après activation
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        window.location.reload();
+
+    // Changer d'onglet
+    function switchTab(tabName) {
+      // Mettre à jour les boutons
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
       });
-    });
-    
-    // Gestion hors ligne
-    window.addEventListener('online', () => {
-      console.log('🌐 Connexion rétablie');
-      // Vous pouvez afficher une notification ici
-    });
-    
-    window.addEventListener('offline', () => {
-      console.log('📡 Mode hors ligne');
-      // Vous pouvez afficher une notification ici
-    });
-    
-    // Prévenir le zoom sur double-tap (iOS)
-    let lastTouchEnd = 0;
-    document.addEventListener('touchend', (event) => {
-      const now = Date.now();
-      if (now - lastTouchEnd <= 300) {
-        event.preventDefault();
+      event.target.classList.add('active');
+
+      // Mettre à jour le contenu
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      document.getElementById(tabName).classList.add('active');
+
+      // Charger le planning si nécessaire
+      if (tabName === 'planning') {
+        loadPlanning();
       }
-      lastTouchEnd = now;
-    }, false);
-    
-    // Pull to refresh personnalisé (optionnel)
-    let startY = 0;
-    let pulling = false;
-    
-    document.addEventListener('touchstart', (e) => {
-      if (window.scrollY === 0) {
-        startY = e.touches[0].pageY;
-        pulling = true;
-      }
-    });
-    
-    document.addEventListener('touchmove', (e) => {
-      if (!pulling) return;
+    }
+
+    // Charger le planning
+    async function loadPlanning() {
+      const content = document.getElementById('planning-content');
       
-      const currentY = e.touches[0].pageY;
-      const pullDistance = currentY - startY;
-      
-      if (pullDistance > 100) {
-        // Vous pouvez ajouter une animation de refresh ici
-      }
-    });
+      // Données de démonstration
+      const events = [
+        { date: 'Lundi 21 Oct', title: 'Stream Valorant', time: '19h00 - 23h00' },
+        { date: 'Mardi 22 Oct', title: 'Stream CS2', time: '20h00 - 00h00' },
+        { date: 'Mercredi 23 Oct', title: 'Stream Variety', time: '19h30 - 23h30' },
+        { date: 'Jeudi 24 Oct', title: 'Stream Valorant', time: '19h00 - 23h00' },
+        { date: 'Vendredi 25 Oct', title: 'Stream long - CS2', time: '18h00 - 02h00' },
+        { date: 'Samedi 26 Oct', title: 'Week-end gaming', time: '16h00 - 00h00' },
+        { date: 'Dimanche 27 Oct', title: 'Chill stream', time: '17h00 - 22h00' }
+      ];
+
+      content.innerHTML = events.map(event => `
+        <div class="event-item">
+          <div class="event-date">${event.date}</div>
+          <div class="event-title">${event.title}</div>
+          <div class="event-time">⏰ ${event.time}</div>
+        </div>
+      `).join('');
+    }
+
+    // Initialisation
+    displayCommands();
     
-    document.addEventListener('touchend', () => {
-      if (pulling) {
-        pulling = false;
-        startY = 0;
-      }
-    });
-    
-    // Log de la version
-    console.log(`🚀 Slyraf MOD Dashboard v${APP_VERSION}`);
+    // Log
+    console.log('🚀 Slyraf MOD Dashboard v2.0.0');
     console.log('📱 Mode:', window.matchMedia('(display-mode: standalone)').matches ? 'PWA' : 'Navigateur');
-  </script>
-  
-  <!-- React et ReactDOM depuis CDN -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  
-  <!-- Votre application React (à compiler avec Babel ou bundler) -->
-  <script type="module">
-    // Import de votre composant React ici
-    // En production, vous utiliserez un bundler comme Vite, Webpack, ou Parcel
   </script>
 </body>
 </html>
