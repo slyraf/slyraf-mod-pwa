@@ -58,33 +58,46 @@ self.addEventListener('fetch', (event) => {
   // Requêtes vers Google Calendar iCal
   if (url.hostname === 'calendar.google.com' && url.pathname.includes('/ical/')) {
     event.respondWith(
-      caches.open(CALENDAR_CACHE).then((cache) => {
-        return fetch(request).then((response) => {
-          // Cloner la réponse avant de la mettre en cache
-          cache.put(request, response.clone());
-          return response;
-        }).catch(() => {
-          // En cas d'échec, utiliser le cache (max 10 min)
-          return cache.match(request).then((cached) => {
-            if (cached) {
-              const cachedDate = new Date(cached.headers.get('date'));
-              const now = new Date();
-              const diffMinutes = (now - cachedDate) / 1000 / 60;
-              
-              if (diffMinutes < 10) {
-                console.log('[SW] Utilisation cache calendrier');
-                return cached;
-              }
+      caches.open(CALENDAR_CACHE).then(async (cache) => {
+        try {
+          // Force un rafraîchissement à chaque appel (pour éviter un vieux cache)
+          const fetchUrl = request.url + '?v=' + Date.now();
+          const networkResponse = await fetch(fetchUrl);
+          
+          // Sauvegarder avec un en-tête 'date' pour savoir quand c'était stocké
+          const data = await networkResponse.clone().text();
+          await cache.put(request, new Response(data, {
+            headers: {
+              'Content-Type': 'text/calendar',
+              'date': new Date().toUTCString()
             }
-            return new Response('[]', { 
-              headers: { 'Content-Type': 'text/calendar' }
-            });
+          }));
+  
+          console.log('[SW] Calendrier mis à jour depuis le réseau');
+          return networkResponse;
+        } catch (err) {
+          // Si erreur → utiliser cache s’il existe
+          const cached = await cache.match(request);
+          if (cached) {
+            const cachedDate = new Date(cached.headers.get('date'));
+            const now = new Date();
+            const diffMinutes = (now - cachedDate) / 1000 / 60;
+            
+            if (diffMinutes < 10) {
+              console.log('[SW] Utilisation du cache calendrier récent');
+              return cached;
+            }
+          }
+          console.warn('[SW] Aucun cache valide, calendrier vide');
+          return new Response('BEGIN:VCALENDAR\nEND:VCALENDAR', { 
+            headers: { 'Content-Type': 'text/calendar' }
           });
-        });
+        }
       })
     );
     return;
   }
+  
 
   // Requêtes vers Twitch (pas de cache)
   if (url.hostname.includes('twitch.tv')) {

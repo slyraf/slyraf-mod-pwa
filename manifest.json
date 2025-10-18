@@ -2,57 +2,57 @@
   "name": "Slyraf MOD Dashboard",
   "short_name": "Slyraf MOD",
   "description": "Dashboard pour les modérateurs de Slyraf avec accès rapide aux outils et commandes",
-  "start_url": "/slyraf-mod-pwa/",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0a0a",
   "theme_color": "#001a33",
   "orientation": "portrait",
-  "scope": "/slyraf-mod-pwa/",
+  "scope": "/",
   "icons": [
     {
-      "src": "/slyraf-mod-pwa/icon-72.png",
+      "src": "/icon-72.png",
       "sizes": "72x72",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/slyraf-mod-pwa/icon-96.png",
+      "src": "/icon-96.png",
       "sizes": "96x96",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/slyraf-mod-pwa/icon-128.png",
+      "src": "/icon-128.png",
       "sizes": "128x128",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/slyraf-mod-pwa/icon-144.png",
+      "src": "/icon-144.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/slyraf-mod-pwa/icon-152.png",
+      "src": "/icon-152.png",
       "sizes": "152x152",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/slyraf-mod-pwa/icon-192.png",
+      "src": "/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/slyraf-mod-pwa/icon-384.png",
+      "src": "/icon-384.png",
       "sizes": "384x384",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/slyraf-mod-pwa/icon-512.png",
+      "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -60,7 +60,7 @@
   ],
   "screenshots": [
     {
-      "src": "/slyraf-mod-pwa/screenshot-mobile.png",
+      "src": "/screenshot-mobile.png",
       "sizes": "390x844",
       "type": "image/png",
       "form_factor": "narrow"
@@ -72,7 +72,7 @@
       "name": "Planning",
       "short_name": "Planning",
       "description": "Voir le planning de la semaine",
-      "url": "/slyraf-mod-pwa/?section=planning",
+      "url": "/?section=planning",
       "icons": [{ "src": "/icon-96.png", "sizes": "96x96" }]
     },
     {
@@ -84,7 +84,7 @@
     }
   ],
   "share_target": {
-    "action": "/slyraf-mod-pwa/share",
+    "action": "/share",
     "method": "GET",
     "params": {
       "title": "title",
